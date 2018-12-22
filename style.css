@@ -1,6 +1,11 @@
-p {
-	font-size: 12px;
-	line-height: 14px;
-	color: black;
-	background-color: blue;
+
+.node {
+	fill: #ccc;
+	stroke: #fff;
+	stroke-width: 2px;
+}
+
+.link {
+	stroke: #777;
+	stroke-width: 2px;
 }

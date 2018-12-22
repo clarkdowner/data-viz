@@ -1,15 +1,106 @@
+<!DOCTYPE html>
 <html>
     <head>
-    	<link rel="stylesheet" type="text/css" href="style.css">
+        <meta charset='utf-8'>
         <title>Page Title</title>
-		<script src="https://d3js.org/d3.v5.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <script src='http://d3js.org/d3.v3.min.js'></script>
     </head>
     <body>
-        <h1>Page Title</h1>
-        <p>This is a really interesting paragraph.</p>
-
         <script type="text/javascript">
-        	d3.select("body").append("p").text("New paragraph!");
+
+            var width = 600;
+            var height = 480;
+
+            /*
+            Force layout requires to data arrays. The first, named 'nodes' 
+            below, contains the objects that are the focal point of the 
+            visualization. The second, named 'links' below, identifies all 
+            edges (referred to as 'links' in d3) between the nodes.
+            */
+
+            var nodes = [
+                {x: width * (1/3), y: height * (1/2)},
+                {x: width * (2/3), y: height * (1/2)},
+            ];
+
+            var links = [
+                {source: 0, target: 1},
+            ];
+
+            /*
+            Create an SVG container to hold the visualization. Only need to 
+            specify the dimensions for this container.
+            */
+
+            var svg = d3.select('body').append('svg')
+                        .attr('width', width)
+                        .attr('height', height);
+
+            /*
+            Create a force layout object.
+            */
+
+            var force = d3.layout.force();
+
+            /*
+            Definde the force layout object properties, including the nodes 
+            and links (edges).
+            */
+
+            force.size([width, height])
+                .nodes(nodes)
+                .links(links);
+
+            /*
+            Define an additional optional parameter.
+            */
+
+            force.linkDistance(width / 2);
+
+            /*
+            Add the nodes and links to the visualization. Note that the 
+            links come before the nodes so the links do not visually apper 
+            to be 'on top of' the nodes. 
+            */
+
+            var link = svg.selectAll('.link')
+                        .data(links)
+                        .enter()
+                        .append('line')
+                        .attr('class', 'link');
+
+            var node = svg.selectAll('.node')
+                        .data(nodes)
+                        .enter()
+                        .append('circle')
+                        .attr('class', 'node');
+
+            /*
+            // TODO: add context for these functions
+            */          
+
+
+            // TOOO: refactor opportunities with these functions
+            force.on('end', function() {
+
+                node.attr('r', width * (1/25))
+                    .attr('cx', function(d) {return d.x;})
+                    .attr('cy', function(d) {return d.y;});
+
+                link.attr('x1', function(d) {return d.source.x;})
+                    .attr('y1', function(d) {return d.source.y;})
+                    .attr('x2', function(d) {return d.target.x;})
+                    .attr('y2', function(d) {return d.target.y;});
+
+            });
+
+            /*
+            Run the force layout.
+            */
+
+            force.start();
+            
         </script>
     </body>
 </html>
